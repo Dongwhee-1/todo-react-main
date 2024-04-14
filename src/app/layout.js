@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 
 export const metadata = {
-  title: "Todo App",
+  title: "Todo List of 'The One'",
   description: "Todo React App using Next.js",
 };
 

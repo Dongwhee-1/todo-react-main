@@ -65,11 +65,12 @@ const TodoList = () => {
   // 컴포넌트를 렌더링합니다.
   return (
     <div className={styles.container}>
-      <h1>Todo List</h1>
+      <h1>Todo List of 'The One'</h1>
       {/* 할 일을 입력받는 텍스트 필드입니다. */}
       <input
         type="text"
         className={styles.itemInput}
+        placeholder="Wake up, Neo..."
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />

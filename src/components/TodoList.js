@@ -7,7 +7,7 @@
 
 import React, { useState } from "react";
 import TodoItem from "@/components/TodoItem";
-import styles from "@/styles/TodoList.module.css";
+// import styles from "@/styles/TodoList.module.css";
 
 // TodoList 컴포넌트를 정의합니다.
 const TodoList = () => {
@@ -64,28 +64,26 @@ const TodoList = () => {
 
   // 컴포넌트를 렌더링합니다.
   return (
-    <div className={styles.container}>
+    <div className="container max-w-600px mx-auto px-20 py-20 bg-slate-600 text-green-500 rounded-lg shadow-md">
       <h1>Todo List of 'The One'</h1>
       {/* 할 일을 입력받는 텍스트 필드입니다. */}
       <input
         type="text"
-        className={styles.itemInput}
+        className="w-full py-5 px-5 mb-10 bg-black text-green-500"
         placeholder="Wake up, Neo..."
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
       <input
-        className={styles.dateInput}
-        type="date" // 완료 기한을 선택할 수 있는 input 요소
+        className="color-scheme-dark text-green-500 bg-black border-2 border-green-500 rounded"
+        type="date"
         value={deadline}
         onChange={(e) => setDeadline(e.target.value)}
       />
-      <br>
-      </br>
-      <br>
-      </br>
+      <br />
+      <br />
       {/* 할 일을 추가하는 버튼입니다. */}
-      <button className={styles.addButton} onClick={addTodo}>
+      <button className="py-5 px-5 bg-black text-green-500 border-2 border-green-500 rounded cursor-pointer" onClick={addTodo}>
         Add Todo
       </button>
       {/* 할 일 목록을 렌더링합니다. */}

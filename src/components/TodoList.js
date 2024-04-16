@@ -7,6 +7,10 @@
 
 import React, { useState } from "react";
 import TodoItem from "@/components/TodoItem";
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { GearIcon } from "@radix-ui/react-icons"
+
 // import styles from "@/styles/TodoList.module.css";
 
 // TodoList 컴포넌트를 정의합니다.
@@ -68,25 +72,24 @@ const TodoList = () => {
       <h1 className="text-2xl">Todo List of 'The One'</h1>
       <br/>
       {/* 할 일을 입력받는 텍스트 필드입니다. */}
-      <input
+      <Input
         type="text"
-        className="w-full py-5 px-5 mb-6 bg-gray-800 text-green-500"
+        className="w-full py-5 px-5 mb-6 border-green-500 bg-gray-800 text-green-500"
         placeholder="Wake up, Neo..."
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
-      <input
-        className="text-green-500 hover:text-yellow-500 bg-gray-800 hover:bg-white border-2 border-green-500 hover:border-yellow-500 rounded"
+      <Input
+        className="w-100 text-green-500 hover:text-yellow-500 bg-gray-800 hover:bg-white border-2 border-green-500 hover:border-yellow-500 rounded"
         type="date"
         value={deadline}
         onChange={(e) => setDeadline(e.target.value)}
       />
       <br />
-      <br />
       {/* 할 일을 추가하는 버튼입니다. */}
-      <button className="py-2 px-2 bg-gray-800 hover:bg-white text-green-500 hover:text-yellow-500 border-2 border-green-500 hover:border-yellow-500 rounded cursor-pointer" onClick={addTodo}>
-        Add Todo
-      </button>
+      <Button className="py-2 px-2 bg-gray-800 hover:bg-white text-green-500 hover:text-yellow-500 border-2 border-green-500 hover:border-yellow-500 rounded cursor-pointer" onClick={addTodo}>
+        <GearIcon className="mr-2 h-4 w-4 animate-spin duration-50"/>Add Todo
+      </Button>
       {/* 할 일 목록을 렌더링합니다. */}
       <ul>
         {todos.map((todo) => (
@@ -103,3 +106,5 @@ const TodoList = () => {
 };
 
 export default TodoList;
+
+

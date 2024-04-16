@@ -64,18 +64,19 @@ const TodoList = () => {
 
   // 컴포넌트를 렌더링합니다.
   return (
-    <div className="container max-w-600px mx-auto px-20 py-20 bg-slate-600 text-green-500 rounded-lg shadow-md">
-      <h1>Todo List of 'The One'</h1>
+    <div className="container max-w-600px mx-auto mt-10 px-10 py-10 bg-slate-900 text-green-500 rounded-lg shadow-md">
+      <h1 className="text-2xl">Todo List of 'The One'</h1>
+      <br/>
       {/* 할 일을 입력받는 텍스트 필드입니다. */}
       <input
         type="text"
-        className="w-full py-5 px-5 mb-10 bg-black text-green-500"
+        className="w-full py-5 px-5 mb-6 bg-gray-800 text-green-500"
         placeholder="Wake up, Neo..."
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
       <input
-        className="color-scheme-dark text-green-500 bg-black border-2 border-green-500 rounded"
+        className="text-green-500 hover:text-yellow-500 bg-gray-800 hover:bg-white border-2 border-green-500 hover:border-yellow-500 rounded"
         type="date"
         value={deadline}
         onChange={(e) => setDeadline(e.target.value)}
@@ -83,7 +84,7 @@ const TodoList = () => {
       <br />
       <br />
       {/* 할 일을 추가하는 버튼입니다. */}
-      <button className="py-5 px-5 bg-black text-green-500 border-2 border-green-500 rounded cursor-pointer" onClick={addTodo}>
+      <button className="py-2 px-2 bg-gray-800 hover:bg-white text-green-500 hover:text-yellow-500 border-2 border-green-500 hover:border-yellow-500 rounded cursor-pointer" onClick={addTodo}>
         Add Todo
       </button>
       {/* 할 일 목록을 렌더링합니다. */}

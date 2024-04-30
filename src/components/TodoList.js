@@ -64,9 +64,8 @@ const TodoList = () => {
     // 입력값이 비어있는 경우 함수를 종료합니다.
     if (input.trim() === "") return;
     const docRef = await addDoc(todoCollection, {
-      text: input,
+      text: deadline + " : " + input,
       completed: false,
-      deadline: deadline,
     })
     // const newTodo = {
     //   id: Date.now(),

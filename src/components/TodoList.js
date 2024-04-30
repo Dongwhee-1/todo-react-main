@@ -41,7 +41,7 @@ const TodoList = () => {
 
   const getTodos = async () => {
    // Firestore 쿼리를 만듭니다.
-   const q = query(todoCollection);
+   const q = query(todoCollection, orderBy("deadline", "asc"));
    // const q = query(collection(db, "todos"), where("user", "==", user.uid));
    // const q = query(todoCollection, orderBy("datetime", "asc"));
 

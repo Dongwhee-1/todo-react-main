@@ -23,7 +23,6 @@ import {
   deleteDoc,
   orderBy,
   where,
-  onSnapshot
 } from "firebase/firestore";
 
 // DB의 todos 컬렉션 참조를 만듭니다. 컬렉션 사용시 잘못된 컬렉션 이름 사용을 방지합니다.
@@ -40,26 +39,24 @@ const TodoList = () => {
     getTodos();
   }, []);
 
-  const getTodos = () => {
-    // Firestore 쿼리를 만듭니다. deadline을 기준으로 먼저 오름차순으로 정렬하고,
-    // 동일한 deadline을 가진 할 일들 간에는 input을 기준으로 두 번째로 오름차순으로 정렬합니다.
-    const q = query(todoCollection, orderBy("deadline"), orderBy("input"));
-    
-    // Firestore 에서 할 일 목록을 조회합니다.
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const newTodos = [];
-      
-      // 가져온 할 일 목록을 newTodos 배열에 담습니다.
-      querySnapshot.forEach((doc) => {
-        newTodos.push({ id: doc.id, ...doc.data() });
-      });
-      
-      // 정렬된 할 일 목록을 상태에 설정합니다.
-      setTodos(newTodos); 
-    });
-  
-    // unsubscribe 함수를 반환하여 컴포넌트가 언마운트될 때 리스너를 정리합니다.
-    return unsubscribe;
+  const getTodos = async () => {
+   // Firestore 쿼리를 만듭니다.
+   const q = query(todoCollection, orderBy("deadline"), orderBy("input"));
+   // const q = query(collection(db, "todos"), where("user", "==", user.uid));
+   // const q = query(todoCollection, orderBy("datetime", "asc"));
+
+   // Firestore 에서 할 일 목록을 조회합니다.
+   const results = await getDocs(q);
+   const newTodos = [];
+
+   // 가져온 할 일 목록을 newTodos 배열에 담습니다.
+   results.docs.forEach((doc) => {
+     // console.log(doc.data());
+     // id 값을 Firestore 에 저장한 값으로 지정하고, 나머지 데이터를 newTodos 배열에 담습니다.
+     newTodos.push({ id: doc.id, ...doc.data() });
+   });
+
+   setTodos(newTodos); 
   }
   
   // addTodo 함수는 입력값을 이용하여 새로운 할 일을 목록에 추가하는 함수입니다.
@@ -69,23 +66,25 @@ const TodoList = () => {
     const docRef = await addDoc(todoCollection, {
       text: deadline + " : " + input,
       completed: false,
-    })
-    // const newTodo = {
-    //   id: Date.now(),
-    //   text: input,
-    //   completed: false,
-    //   deadline: deadline, // 선택한 완료 기한을 할일 객체에 추가
-    // };
-    // 기존 할 일 목록에 새로운 할 일을 추가하고, 입력값을 초기화합니다.
-    // {
-    //   id: 할일의 고유 id,
-    //   text: 할일의 내용,
-    //   completed: 완료 여부,
-    // }
-    // ...todos => {id: 1, text: "할일1", completed: false}, {id: 2, text: "할일2", completed: false}}, ..
-    setTodos([...todos, { id: docRef.id, text: deadline + " : " + input, completed: false }]);
+    });
+
+    // Firestore에 할 일이 추가된 후에 클라이언트 측에서 상태를 업데이트합니다.
+    // 새로운 할 일을 추가한 후에 정렬된 상태로 상태를 업데이트합니다.
+    const newTodo = { id: docRef.id, text: deadline + " : " + input, completed: false };
+    const updatedTodos = [...todos, newTodo].sort((a, b) => {
+      // deadline을 기준으로 오름차순으로 정렬하고,
+      // deadline이 동일한 경우 input을 기준으로 오름차순으로 정렬합니다.
+      if (a.deadline === b.deadline) {
+        return a.input.localeCompare(b.input);
+      } else {
+        return a.deadline.localeCompare(b.deadline);
+      }
+    });
+
+    setTodos(updatedTodos);
     setInput("");
   };
+
 
   // toggleTodo 함수는 체크박스를 눌러 할 일의 완료 상태를 변경하는 함수입니다.
   const toggleTodo = (id) => {

@@ -39,24 +39,26 @@ const TodoList = () => {
     getTodos();
   }, []);
 
-  const getTodos = async () => {
-   // Firestore 쿼리를 만듭니다.
-   const q = query(todoCollection);
-   // const q = query(collection(db, "todos"), where("user", "==", user.uid));
-   // const q = query(todoCollection, orderBy("datetime", "asc"));
-
-   // Firestore 에서 할 일 목록을 조회합니다.
-   const results = await getDocs(q);
-   const newTodos = [];
-
-   // 가져온 할 일 목록을 newTodos 배열에 담습니다.
-   results.docs.forEach((doc) => {
-     // console.log(doc.data());
-     // id 값을 Firestore 에 저장한 값으로 지정하고, 나머지 데이터를 newTodos 배열에 담습니다.
-     newTodos.push({ id: doc.id, ...doc.data() });
-   });
-
-   setTodos(newTodos); 
+  const getTodos = () => {
+    // Firestore 쿼리를 만듭니다. deadline을 기준으로 먼저 오름차순으로 정렬하고,
+    // 동일한 deadline을 가진 할 일들 간에는 input을 기준으로 두 번째로 오름차순으로 정렬합니다.
+    const q = query(todoCollection, orderBy("deadline"), orderBy("input"));
+    
+    // Firestore 에서 할 일 목록을 조회합니다.
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const newTodos = [];
+      
+      // 가져온 할 일 목록을 newTodos 배열에 담습니다.
+      querySnapshot.forEach((doc) => {
+        newTodos.push({ id: doc.id, ...doc.data() });
+      });
+      
+      // 정렬된 할 일 목록을 상태에 설정합니다.
+      setTodos(newTodos); 
+    });
+  
+    // unsubscribe 함수를 반환하여 컴포넌트가 언마운트될 때 리스너를 정리합니다.
+    return unsubscribe;
   }
   
   // addTodo 함수는 입력값을 이용하여 새로운 할 일을 목록에 추가하는 함수입니다.

@@ -74,11 +74,7 @@ const TodoList = () => {
     const updatedTodos = [...todos, newTodo].sort((a, b) => {
       // deadline을 기준으로 오름차순으로 정렬하고,
       // deadline이 동일한 경우 input을 기준으로 오름차순으로 정렬합니다.
-      if (a.deadline === b.deadline) {
-        return a.input.localeCompare(b.input);
-      } else {
-        return a.deadline.localeCompare(b.deadline);
-      }
+      return a.deadline.localeCompare(b.deadline);
     });
 
     setTodos(updatedTodos);

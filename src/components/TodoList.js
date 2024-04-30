@@ -41,7 +41,7 @@ const TodoList = () => {
 
   const getTodos = async () => {
    // Firestore 쿼리를 만듭니다.
-   const q = query(todoCollection, orderBy("deadline"), orderBy("input"));
+   const q = query(todoCollection);
    // const q = query(collection(db, "todos"), where("user", "==", user.uid));
    // const q = query(todoCollection, orderBy("datetime", "asc"));
 
@@ -66,15 +66,15 @@ const TodoList = () => {
     const docRef = await addDoc(todoCollection, {
       text: deadline + " : " + input,
       completed: false,
+      deadline: new Date(deadline)
     });
 
     // Firestore에 할 일이 추가된 후에 클라이언트 측에서 상태를 업데이트합니다.
     // 새로운 할 일을 추가한 후에 정렬된 상태로 상태를 업데이트합니다.
-    const newTodo = { id: docRef.id, text: deadline + " : " + input, completed: false };
+    const newTodo = { id: docRef.id, text: deadline + " : " + input, completed: false, deadline: new Date(deadline) };
     const updatedTodos = [...todos, newTodo].sort((a, b) => {
-      // deadline을 기준으로 오름차순으로 정렬하고,
-      // deadline이 동일한 경우 input을 기준으로 오름차순으로 정렬합니다.
-      return a.deadline.localeCompare(b.deadline);
+      // deadline을 비교하여 정렬합니다.
+      return a.deadline - b.deadline;
     });
 
     setTodos(updatedTodos);

@@ -23,6 +23,7 @@ import {
   deleteDoc,
   orderBy,
   where,
+  onSnapshot
 } from "firebase/firestore";
 
 // DB의 todos 컬렉션 참조를 만듭니다. 컬렉션 사용시 잘못된 컬렉션 이름 사용을 방지합니다.

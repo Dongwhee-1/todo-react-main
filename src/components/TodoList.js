@@ -144,7 +144,7 @@ const TodoList = () => {
       <h1 className="text-2xl">
         Todo List of 
         <a href="/login" className="text-yellow-500 hover:underline">
-        '{data?.user?.name}'
+          &nbsp;'{data?.user?.name}'
         </a>
       </h1>
       <br/>

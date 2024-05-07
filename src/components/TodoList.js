@@ -142,9 +142,9 @@ const TodoList = () => {
   return (
     <div className="container max-w-600px mx-auto mt-10 px-10 py-10 bg-slate-900 text-green-500 rounded-lg shadow-md">
       <h1 className="text-2xl">
-        Todo List of 
+        Todo List of&nbsp;
         <a href="/login" className="text-yellow-500 hover:underline">
-          &nbsp;'{data?.user?.name}'
+          '{data?.user?.name}'
         </a>
       </h1>
       <br/>

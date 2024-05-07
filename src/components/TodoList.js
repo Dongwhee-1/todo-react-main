@@ -10,6 +10,8 @@ import TodoItem from "@/components/TodoItem";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { GearIcon } from "@radix-ui/react-icons"
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 // firebase 관련 모듈을 불러옵니다.
 import { db } from "@/firebase";
@@ -35,15 +37,29 @@ const TodoList = () => {
   const [input, setInput] = useState("");
   const [deadline, setDeadline] = useState("");
 
+  const router = useRouter();
+  const { data } = useSession({
+    required: true,
+    onUnauthenticated() {
+      router.replace("/login");
+    },
+  });
+
   useEffect(() => {
+    console.log("data", data);
     getTodos();
-  }, []);
+  }, [data]);
 
   const getTodos = async () => {
    // Firestore 쿼리를 만듭니다.
-   const q = query(todoCollection, orderBy("deadline", "asc"));
    // const q = query(collection(db, "todos"), where("user", "==", user.uid));
    // const q = query(todoCollection, orderBy("datetime", "asc"));
+
+   if (!data?.user?.name) return;
+
+   const q = query(todoCollection,
+    where("userName", "==", data?.user?.name),
+    orderBy("deadline", "asc"));
 
    // Firestore 에서 할 일 목록을 조회합니다.
    const results = await getDocs(q);
@@ -64,6 +80,7 @@ const TodoList = () => {
     // 입력값이 비어있는 경우 함수를 종료합니다.
     if (input.trim() === "") return;
     const docRef = await addDoc(todoCollection, {
+      userName: data?.user?.name,
       text: deadline + " : " + input,
       completed: false,
       deadline: new Date(deadline)
@@ -122,7 +139,7 @@ const TodoList = () => {
   // 컴포넌트를 렌더링합니다.
   return (
     <div className="container max-w-600px mx-auto mt-10 px-10 py-10 bg-slate-900 text-green-500 rounded-lg shadow-md">
-      <h1 className="text-2xl">Todo List of 'The One'</h1>
+      <h1 className="text-2xl">Todo List of '{data?.user?.name}'</h1>
       <br/>
       {/* 할 일을 입력받는 텍스트 필드입니다. */}
       <Input

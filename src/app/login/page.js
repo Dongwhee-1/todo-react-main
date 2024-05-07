@@ -11,7 +11,7 @@ export default function Login() {
     <div className="flex justify-center h-screen">
       {session ? (
         <div className="grid m-auto text-center">
-          <div className="m-4">Signed in as {session.user.name}</div>
+          <div className="m-4 text-white">Signed in as {session.user.name}</div>
           <button
             className={`w-40
             justify-self-center
@@ -37,7 +37,7 @@ export default function Login() {
         </div>
       ) : (
         <div className="grid m-auto text-center">
-          <div className="m-4">Not signed in</div>
+          <div className="m-4 text-white">Not signed in</div>
           <button
             className={`w-40
             justify-self-center

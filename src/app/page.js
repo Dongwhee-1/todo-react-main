@@ -7,9 +7,9 @@ import TodoList from "@/components/TodoList";
 export default function Home() {
   return (
     <SessionProvider>
-    <div>
-      <TodoList />
-    </div>
+      <div>
+        <TodoList />
+      </div>
     </SessionProvider>
   );
 }

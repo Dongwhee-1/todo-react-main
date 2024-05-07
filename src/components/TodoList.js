@@ -108,7 +108,7 @@ const TodoList = () => {
       // )
       // ...todo => id: 1, text: "할일1", completed: false
       todos.map((todo) => {
-        if (todo.id === id) {
+        if (todo.id === id && todo.userName === data?.user?.name) {
           // Firestore 에서 해당 id를 가진 할 일을 찾아 완료 상태를 업데이트합니다.
           const todoDoc = doc(todoCollection, id);
           updateDoc(todoDoc, { completed: !todo.completed });
@@ -123,15 +123,17 @@ const TodoList = () => {
 
   // deleteTodo 함수는 할 일을 목록에서 삭제하는 함수입니다.
   const deleteTodo = (id) => {
-    // Firestore 에서 해당 id를 가진 할 일을 삭제합니다.
-    const todoDoc = doc(todoCollection, id);
-    deleteDoc(todoDoc);
-
     // 해당 id를 가진 할 일을 제외한 나머지 목록을 새로운 상태로 저장합니다.
     // setTodos(todos.filter((todo) => todo.id !== id));
     setTodos(
       todos.filter((todo) => {
-        return todo.id !== id;
+        if (todo.userName === data?.user?.name) {
+          // Firestore 에서 해당 id를 가진 할 일을 삭제합니다.
+          const todoDoc = doc(todoCollection, id);
+          deleteDoc(todoDoc);
+          // 해당 id를 가진 할 일을 제외한 나머지 목록을 새로운 상태로 저장합니다.
+          return todo.id !== id;
+        }
       })
     );
   };
@@ -139,7 +141,12 @@ const TodoList = () => {
   // 컴포넌트를 렌더링합니다.
   return (
     <div className="container max-w-600px mx-auto mt-10 px-10 py-10 bg-slate-900 text-green-500 rounded-lg shadow-md">
-      <h1 className="text-2xl">Todo List of '{data?.user?.name}'</h1>
+      <h1 className="text-2xl">
+        Todo List of 
+        <a href="/login" className="text-yellow-500 hover:underline">
+        '{data?.user?.name}'
+        </a>
+      </h1>
       <br/>
       {/* 할 일을 입력받는 텍스트 필드입니다. */}
       <Input
